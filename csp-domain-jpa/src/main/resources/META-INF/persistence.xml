@@ -1,0 +1,15 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="cspPU" transaction-type="RESOURCE_LOCAL">
+		<class>org.occ.csp.domain.Region</class>
+		<class>org.occ.csp.domain.Fellowship</class>
+		<class>org.occ.csp.domain.ChurchMember</class>
+		<class>org.occ.csp.domain.Footprint</class>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop"/> -->
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,424 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.igsapp.wibc.dataobj.Context.ResponseContext"%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.List"%>
+<%@ page import = "com.cathayins.ag.vo.DTZZC001_FUNCTION_vo" %>
+<%@ page import = "com.cathayins.ag.z0.module.AG_Z0Z003" %>
+<%@ page import = "com.cathayins.ag.vo.DTAGZ010_vo" %>
+<%@ include file="/html/CM/msgDisplayer.jsp" %>
+
+<%
+	String webCtx = request.getContextPath(); 
+	ResponseContext resp = (ResponseContext)request.getAttribute("$Attribute.responseContext");
+	List systemCodeList = resp.getValue("systemCodeList") != null ? (List)resp.getValue("systemCodeList") : Collections.EMPTY_LIST;
+	List resultDataList = resp.getValue("resultDataList") != null ? (List)resp.getValue("resultDataList") : Collections.EMPTY_LIST;
+	
+	String actionName = (String)resp.getActionName();
+	
+	String dbk_no = "";
+	String feld_no = "";
+	
+	if (!actionName.equalsIgnoreCase("prompt")) {
+		dbk_no = (String)resp.getValue("dbk_no");
+		feld_no = resp.getValue("feld_no") == null ? "" : (String)resp.getValue("feld_no");
+	}
+	String m_syscode =(String)resp.getValue(AG_Z0Z003.urlParam_syscode);
+	String url_m_syscode = AG_Z0Z003.urlParam_syscode + "=" + m_syscode;
+
+ %>
+
+
+<!-- page import="javax.sound.midi.SysexMessage"  -->
+<html>
+<head>
+<title>PFA0_0150</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<link href="../../../../html/CM/css/cm.css" rel="stylesheet" type="text/css">
+<script src="<%=webCtx%>/html/CM/js/Validator.js"></script>
+<script src="<%=webCtx%>/html/CM/js/validation.js"></script>
+<script src="<%=webCtx%>/html/CM/js/AlertHandler.js"></script>
+<script src="<%=webCtx%>/html/CM/js/PageControllerObj.js"></script>
+<script src="<%=webCtx%>/html/CM/js/pageController.js"></script>
+<script src="<%=webCtx%>/html/CM/js/HotKey.js"></script>
+<script src="<%=webCtx%>/html/CM/js/utility.js"></script>
+<!-- ajax lib -->
+<script src=../../../../html/CM/js/ajax/prototype.js"></script>
+<script src=../../../../html/CM/js/ajax/CSRUtil.js"></script>
+
+<script type="text/javascript">
+function stat(){
+var a = pageYOffset+window.innerHeight-document.bar1.document.height-15;
+document.bar1.top = a;
+setTimeout('stat()',2);
+}
+function fix(){
+nome=navigator.appName;
+if(nome=='Netscape'){
+stat();
+}
+else{
+var a=document.body.scrollTop-document.all.bar1.offsetHeight+30;
+bar1.style.top = a;
+}}
+
+
+var validator;
+function initValidator() {
+	validator = new Validator();
+   	validator.errHandler = new AlertHandler();
+}
+function initPage() {
+	fix();
+	initValidator();
+	updateScreen();
+	displayMessage();
+}
+</script>
+
+
+</head>
+
+<body bgcolor="#F0FBC6" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad='initPage()' onResize="fix()" onScroll="fix()">
+<script>
+
+function updateScreen() {
+	var aName = '<%=actionName%>';
+	if (aName != 'prompt')  {
+		for(var idx=0;idx<document.getElementById('dbk_no').length;idx++){
+			if(document.getElementById('dbk_no')[idx].value=='<%=dbk_no%>'){
+				document.getElementById('dbk_no').selectedIndex=idx;
+				break;
+			}
+		}
+		
+		if (aName != 'delete')  {
+			document.getElementById('feld_no').value = '<%=feld_no%>' ;
+		}
+		//if (0 == 0) {
+		//	alert("查無資料 !!");
+		//}
+	}
+}
+
+
+function doValidate() {
+	validator.errHandler.clear();
+   	validator.clear();
+   	validator.errHandler = new AlertHandler();
+   	
+	validator.define('feld_no', '', '欄位代號 : 需為20碼內', 'string', 0, 20);
+
+	if (!validator.validate()) {
+		validator.errHandler.display();
+		return false;
+	}	
+	return true;
+}
+
+
+function queryData(obj) {
+	if (document.getElementById('feld_no').value == 0) {
+		document.form1.action = '<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0150/queryData';
+		document.form1.submit();
+		return;
+	}
+	var validateOk = doValidate();
+	if (validateOk) {
+		document.form1.action = '<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0150/queryData';
+		document.form1.submit();
+	}
+	
+}
+
+
+
+function extracElementNo(name) {
+	var nameArr = name.split("_");
+	var no = nameArr[nameArr.length-1];
+	return no;
+}
+
+function retriveRowData(obj) {
+	var resultArr = new Array();
+	var nameArr = new Array();
+	var valueArr = new Array();
+	var currentTR = obj.parentElement.parentElement.parentElement;
+	
+	nameArr.push('dbk_no');
+	nameArr.push('feld_no');
+	nameArr.push('feldt_ype');
+	nameArr.push('feld_cont_long');
+	nameArr.push('feld_name_long');
+	nameArr.push('feld_name');
+	nameArr.push('rmrk');
+	nameArr.push('douc_path');
+	
+	valueArr.push(currentTR.cells(1).innerText);
+	valueArr.push(currentTR.cells(2).innerText);
+	valueArr.push(currentTR.cells(3).innerText);
+	valueArr.push(currentTR.cells(4).innerText);
+	valueArr.push(currentTR.cells(5).innerText);
+	valueArr.push(currentTR.parentElement.rows(currentTR.rowIndex + 1).cells(0).innerText);
+	valueArr.push(currentTR.parentElement.rows(currentTR.rowIndex + 1).cells(1).innerText);
+	valueArr.push(currentTR.parentElement.rows(currentTR.rowIndex + 1).cells(2).innerText);
+	
+	
+	resultArr.push(nameArr);
+	resultArr.push(valueArr);
+	return resultArr;
+}
+
+
+function updateData(obj) {
+	document.getElementById("wherefrom").value = "update";
+
+	var currentTR = obj.parentElement.parentElement.parentElement;
+	
+	var feld_no = currentTR.parentElement.rows(currentTR.rowIndex + 1).cells(0).innerText;
+	// var dbk_no = document.getElementById('dbk_no').value;
+	var dbk_no = currentTR.parentElement.rows(currentTR.rowIndex).cells(1).innerText;
+	
+	document.getElementById("feld_no").value = feld_no;
+	document.getElementById("dbk_no").value = dbk_no;
+		
+	document.form1.action = '<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0150/showWindow?wherefrom=update';
+	document.form1.submit();
+}
+
+function deleteData(obj) {
+	document.getElementById("wherefrom").value = "delete";
+	
+	var currentTR = obj.parentElement.parentElement.parentElement;
+	var feld_no = currentTR.parentElement.rows(currentTR.rowIndex + 1).cells(0).innerText;
+	// var dbk_no = document.getElementById('dbk_no').value;
+	var dbk_no = currentTR.parentElement.rows(currentTR.rowIndex).cells(1).innerText;
+	
+	document.getElementById("feld_no").value = feld_no;
+	document.getElementById("dbk_no").value = dbk_no;
+
+	document.form1.action = '<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0150/showWindow?wherefrom=delete';
+	document.form1.submit();
+}
+
+
+
+
+
+function download(fullPath) {
+	$("docPath").value = fullPath;
+	document.form2.action = '<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0150/downloadFile';
+	document.form2.submit();
+}
+
+</script>
+
+<center>
+<span id="bar1" style="position:absolute; left:0; top:0; width:100%; z-index:9; visibility: visible;" > 
+<table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td width="4" background="../../../../images/CM/border_01.gif">
+    	<img src="../../../../images/CM/border_01.gif" width="4" height="12">
+    	<input name="wherefrom" type="hidden" value="update">
+    </td>
+    <td valign="top" bgcolor="#F0FBC6">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" background="../../../../images/CM/border_03.gif">
+        <tr> 
+          <td height="4"><img src="../../../../images/CM/border_03.gif" width="12" height="4"></td>
+        </tr>
+      </table>
+      <!-- InstanceBeginEditable name="title" -->
+      <table width="100%" border="0" cellpadding="2" cellspacing="0" class="subTitle">
+        <tr> 
+          <td width="20" height="24"> ●</td>
+          <td>會友管理查詢</td>
+          <td><div align="right">
+            <div align="right">畫面編號：PFA00150</div></td>
+        </tr>
+      </table>
+      <!-- InstanceEndEditable --></td>
+    <td width="4" background="../../../../images/CM/border_02.gif">
+      <img src="../../../../images/CM/border_02.gif" width="4" height="12"></td>
+    <td width="5" class="tbBox"><img src="../../../../images/CM/ecblank.gif" width="5" height="1"></td>
+  </tr>
+</table>
+</span> 
+
+<table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td>　</td>
+  </tr>
+</table>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td width="4" background="../../../../images/CM/border_01.gif">
+      <img src="../../../../images/CM/border_01.gif" width="4" height="12">
+    </td>
+    <td width="100%" valign="top" bgcolor="#F0FBC6"><!-- InstanceBeginEditable name="content" -->
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td valign="top"> <table width=97% border=0 align=center cellpadding="0" cellspacing="1" bgcolor="#003366">
+              <tbody>
+                <tr> 
+                  <td class="tbBox2"> <img src="../../../../images/CM/icon_dot11.gif" width="18" height="16">會友查詢</td>
+                </tr>
+                <tr bgcolor=#FFFFFF> 
+                  <td><table width="100%" border="0" cellspacing="0" cellpadding="5">
+                      <tr> 
+                        <td align="center">
+                        <form name="form1" method="post">
+                            <input name="m_syscode" value='<%=m_syscode %>' type="hidden">
+                          <table width="100%" border="0" cellpadding="0" cellspacing="1" class="tbBox2">
+                            <tr>
+                              <td width="15%" class="tbYellow">ID或護照號碼代號</td>
+                              <td class="tbYellow2">
+                              
+                                <input type="text" name="feld_no1" size="30" value=""></td>
+                              <td width="15%" class="tbYellow">姓名</td>
+                              <td class="tbYellow2">
+                                <input type="text" name="feld_no" size="30" value=""> 
+                              </td>
+                              <td class="tbYellow2">
+                                <input type="submit" name="query_btn" class="button" value="查詢" onclick = 'queryData(this)'></td>
+                              </tr>
+                          </table>
+                          <table id = 'dataTable' width="877" border="0" cellpadding="0" cellspacing="1" class="tbBox2" id="table20">
+                            <tr>
+                              <td rowspan="2" align="center" class="tbBlue" width="87">
+                              奉獻號碼</td>
+                              <td align="center" class="tbBlue" width="87">姓名</td>
+                              <td align="center" class="tbBlue" width="87">已、未婚</td>
+                              <td align="center" class="tbBlue" width="66">英文名</td>
+                              <td align="center" class="tbBlue" width="76">介紹人</td>
+                              <td align="center" class="tbBlue" width="51">關係</td>
+                              <td align="center" class="tbBlue" width="59">生日</td>
+                              <td align="center" class="tbBlue" width="52">行動(1)</td>
+                              <td align="center" class="tbBlue" width="51">行動(2)</td>
+                              <td align="center" class="tbBlue" width="51">
+                              <font face="Arial">HOME</font></td>
+                              <td align="center" class="tbBlue" width="51">
+                              <font face="Arial">OFFICE</font></td>
+                              <td rowspan="2" align="center" class="tbBlue" width="129">　</td>
+                            </tr>
+                            <tr>
+                              <td align="center" class="tbBlue" width="87">地址</td>
+                              <td colspan="2" align="center" class="tbBlue" width="156">
+                              <font face="Arial">Email</font></td>
+                              <td colspan="2" align="center" class="tbBlue" width="130">
+                              <font face="Arial">Skype</font></td>
+                              <td align="center" class="tbBlue" width="59">職業</td>
+                              <td align="center" class="tbBlue" width="54">專長</td>
+                              <td align="center" class="tbBlue" width="142" colspan="3">
+                              裝備</td>
+                            </tr>
+                             
+                            
+
+							 <%                                
+                                 for (int i =0; i<resultDataList.size(); i++) {
+                              		DTAGZ010_vo vo = (DTAGZ010_vo)resultDataList.get(i);                                		                                                       	                          	                            	                        
+							 %>
+                             <tr id="row_<%=i+1%>">
+                              <td rowspan="2" align="center" class="tbBlue3" width="87"><%=i+1%></td>
+                              <td align="center" class="tbBlue3" width="87"><%=vo.getDBK_NO() %></td>
+                              <td class="tbBlue3" align="center" width="87"><%=vo.getFELD_NAME() %></td>                             
+                              	<%
+                              		String feldTypeDisplay = "";
+                              		String feldType = vo.getFELD_TYPE();                            	
+                              		if (feldType.equals("1")) {
+                              			feldTypeDisplay = "1.文數字";
+                              		} else if (feldType.equals("2")) {
+                              		feldTypeDisplay = "2.數字";
+                              		} else {
+                              			feldTypeDisplay = "3.日期";
+                              		}
+                              	
+                               	%>
+                              <td align="center" class="tbBlue3" width="66"><%=feldTypeDisplay %></td>
+                              <td align="center" class="tbBlue3" width="76"><%=vo.getFELD_CONT_LONG() %></td>
+                              <td align="center" class="tbBlue3" width="51"><%=vo.getFELD_NAME_LONG() %></td>
+                              <td width="59" class="tbBlue3">
+                              	　</td>
+                              <td width="52" class="tbBlue3">
+                              	　</td>
+                              <td width="51" class="tbBlue3">
+                              	　</td>
+                              <td width="51" class="tbBlue3">
+                              	　</td>
+                              <td width="51" class="tbBlue3">
+                              	　</td>
+                              <td width="129" rowspan="2" class="tbBlue3">
+                              	<span class="MsoNormal">
+                                	<input name="modify_btn_<%=i+1 %>" type="reset" class="button" value="修改" onclick = 'updateData(this)'>
+                                	<input name="delete_btn_<%=i+1 %>" type="button" class="button" value="刪除" onclick = 'deleteData(this)'>
+                              	</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbBlue3"  align="center" width="87">
+                              	<a href='<%= webCtx %>/servlet/HttpDispatcher/AGZ0_0250/query?<%=url_m_syscode%>&dbk_no=<%=vo.getDBK_NO() %>&feld_no=<%=vo.getFELD_NO() %>'><%=vo.getFELD_NO() %></a>
+                              </td>
+                              <%
+                                    String rmrkStr = vo.getRMRK();
+                                    if(null==rmrkStr){
+                                    	rmrkStr = "";
+                                    }
+                              %>
+                              <td colspan="2" class="tbBlue3" align="center" width="156"><%=rmrkStr %></td>
+                              	<%
+                              		String fullPath = vo.getDOCU_PATH();
+                              	    if(null==fullPath){
+                              	    	fullPath = "";
+                              	    }
+                               	%>
+                              <td colspan="2" class="tbBlue3" width="130"><a href='javascript:download("<%=fullPath %>")'><%=fullPath %></a></td>
+                              <td width="59" class="tbBlue3">
+                              	　</td>
+                              <td width="52" class="tbBlue3">
+                              	　</td>
+                              <td width="153" class="tbBlue3" colspan="3">
+                              	　</td>
+                            </tr>
+                            <% }%>
+                            
+                          </table>
+                          </form> </td>
+                          
+                          
+                          <form name="form2" action="post" target="iframe1">
+                            <input name="m_syscode" value='<%=m_syscode %>' type="hidden">
+                          <table>
+                          
+                              <tr>
+                          		<input type="hidden" id="docPath" name="docPath">
+                              </tr>
+              
+                             </table>
+                          </form>
+                      </tr>
+                    </table></td>
+                </tr>
+              </tbody>
+            </table>
+             
+              <p> <br>
+              </p>
+          </td>
+        </tr>
+      </table>
+      <!-- InstanceEndEditable --></td>
+    <td width="4" background="<%=webCtx %>/images/CM/border_02.gif">
+      <img src="<%=webCtx %>/images/CM/border_02.gif" width="4" height="12">
+    </td>
+    <td width="5" class="tbBox">
+      <img src="<%=webCtx %>/images/CM/ecblank.gif" width="5" height="1">
+    </td>
+  </tr>
+</table>
+
+<iframe style="display:'none'" src="" height="0" width="0" name="iframe1" frameborder="0"></iframe> 
+</center>
+
+</body>
+</html>
