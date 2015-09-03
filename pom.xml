@@ -348,9 +348,13 @@
 				<version>0.0.1-SNAPSHOT</version>
 				<scope>compile</scope>
 			</dependency>
-			<!-- TODO cloud service platform auth <dependency> <groupId>com.hongfang.csp.webframeworx.auth</groupId> 
-				<artifactId>csp-webframeworx-auth</artifactId> <version>0.0.1-SNAPSHOT</version> 
-				<scope>compile</scope> </dependency> -->
+			<!-- TODO cloud service platform auth 
+			<dependency> 
+				<groupId>com.hongfang.csp.webframeworx.auth</groupId> 
+				<artifactId>csp-webframeworx-auth</artifactId> 
+				<version>0.0.1-SNAPSHOT</version> 
+				<scope>compile</scope> 
+			</dependency> -->
 			<!-- End of HongFang Cornelius Library -->
 
 			<!--csp -->
