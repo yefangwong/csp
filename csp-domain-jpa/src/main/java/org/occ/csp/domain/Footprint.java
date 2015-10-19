@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -18,7 +17,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name="tbl_footprint")
-@XmlRootElement
 public class Footprint implements Serializable {
 
 	/**

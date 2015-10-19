@@ -2,6 +2,7 @@ package org.occ.csp.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -23,7 +24,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="tbl_churchmem_mst")
-@XmlRootElement
 public class ChurchMember implements Serializable {
 
 	/**
@@ -43,6 +43,8 @@ public class ChurchMember implements Serializable {
 
 	private ChurchMemberDtl dtl;
 	
+	private List<ActivatedCardInfo> activatedCardInfoList;
+	
 	private String createUid;
 	private String updateUid;
 	
@@ -59,7 +61,7 @@ public class ChurchMember implements Serializable {
 		return memberSid;
 	}
 
-	@Column(name="cmem_acct")
+	@Column(name="cmem_act")
 	@NotNull
 	public String getMemberAccount() {
 		return memberAccount;
@@ -105,6 +107,14 @@ public class ChurchMember implements Serializable {
 		return this.dtl;
 	}
 	
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="churchMember")
+	public List<ActivatedCardInfo> getActivatedCardInfoList() {
+		return this.activatedCardInfoList;
+	}
+	
+	public void setActivatedCardInfoList(List<ActivatedCardInfo> activatedCardInfoList) {
+		this.activatedCardInfoList = activatedCardInfoList;
+	}
 
 	@Column(name="cmem_crt_uid")
 	@NotNull

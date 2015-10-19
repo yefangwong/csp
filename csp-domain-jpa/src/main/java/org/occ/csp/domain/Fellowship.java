@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -24,7 +23,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="tbl_fellowship")
-@XmlRootElement
 public class Fellowship implements Serializable {
 	/**
 	 * 
@@ -101,8 +99,8 @@ public class Fellowship implements Serializable {
 		this.fellowshipName = fellowshipName;
 	}
 
-	public Region setRegion(Region region) {
-		return belongTo = region;
+	public void setRegion(Region region) {
+		this.belongTo = region;
 	}
 
 	public void setChurchMembers(List<ChurchMember> churchMembers) {
