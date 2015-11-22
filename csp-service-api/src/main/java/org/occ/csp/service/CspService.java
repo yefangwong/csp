@@ -15,16 +15,16 @@ import org.occ.csp.domain.Region;
  */
 public interface CspService {
 	public String hello();
-	List<Region> getAllRegions();
-	List<Fellowship> getFellowshipsByRegion(String regionId);
-	List<ChurchMember> getChurchMembersByFellowship(String fellowshipId);
-	public void saveFootprint(Footprint footprint);
-	public int getMaxFootprintId();
-	List<Footprint> getFootprintsByMemberId(String memberId);
-	public Fellowship getFellowshipById(String fellowshipId);
-	public List<Fellowship> getAllFellowships();
-	public ChurchMember getChurchMemberById(String memberId);
-	public ChurchMember getChurchMemberByEmail(String email);
+	List<Region> getAllRegions() throws Exception;
+	List<Fellowship> getFellowshipsByRegion(String regionId) throws Exception;
+	List<ChurchMember> getChurchMembersByFellowship(String fellowshipId) throws Exception;
+	public void saveFootprint(Footprint footprint) throws Exception;
+	public int getMaxFootprintId() throws Exception;
+	List<Footprint> getFootprintsByMemberId(String memberId) throws Exception;
+	public Fellowship getFellowshipById(String fellowshipId) throws Exception;
+	public List<Fellowship> getAllFellowships() throws Exception;
+	public ChurchMember getChurchMemberById(String memberId) throws Exception;
+	public ChurchMember getChurchMemberByEmail(String email) throws Exception;
 	//add by Mark for calling by ocheckin application 2014-09-01
 	public void saveChurchMember(ChurchMember churchMember) throws Exception;
 	
@@ -33,7 +33,7 @@ public interface CspService {
 	 * @param cardNum 卡號
 	 * @return true 表示卡片已經存在
 	 */
-	public boolean cardNumExists(String cardNum);
+	public boolean cardNumExists(String cardNum) throws Exception;
 	
 	/**
 	 * 開卡
@@ -41,7 +41,7 @@ public interface CspService {
 	 * @param cardNum 卡號
 	 * @return OCCId
 	 */
-	public String activateCard(String name, String cardNum) throws Exception;
+	public void activateCard(String name, String cardNum) throws Exception;
 	
 	/**
 	 * 刪除卡片
@@ -54,7 +54,7 @@ public interface CspService {
 	 * @param name 姓名
 	 * @return List<ActivatedCardInfo> 會友靠卡資訊
 	 */
-	public List<ActivatedCardInfo> getCardInfoByName(String name);
+	public List<ActivatedCardInfo> getCardInfoByName(String name) throws Exception;
 	
 	/**
 	 * 同名開卡
@@ -64,4 +64,19 @@ public interface CspService {
 	 * @throws Exception
 	 */
 	public void activeCardWithTheSameName(String OCCId, String name, String cardNumber) throws Exception;
+	
+	/**
+	 * 根據卡號取得 OCC Id
+	 * @param cardNum
+	 * @return OCC Id
+	 * @throws Exception
+	 */
+	public String getOccId(String cardNum) throws Exception;
+	
+	/**
+	 * 取得所有已經靠卡設定的卡清單
+	 * @return
+	 */
+	public List<ActivatedCardInfo> getAllActivatedCardList() throws Exception;
+	
 }
