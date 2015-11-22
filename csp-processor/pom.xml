@@ -2,7 +2,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.occ.csp</groupId>
   <artifactId>csp-processor</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -13,7 +12,7 @@
   <parent>
 	<groupId>org.occ.csp</groupId>
 	<artifactId>csp-pom</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
   </parent>
 
   <properties>
@@ -187,16 +186,17 @@
       <artifactId>csp-webframeworx-web</artifactId>
       <scope>compile</scope>
     </dependency>
+    <!-- 
     <dependency>
       <groupId>com.hongfang.csp.webframeworx.auth</groupId>
       <artifactId>csp-webframeworx-auth</artifactId>
       <scope>compile</scope>
     </dependency>
-    
-    <dependency>
+    -->
+    <!-- <dependency>
       <groupId>com.hongfang.ckernel</groupId>
       <artifactId>csp-ckernel</artifactId>
       <scope>compile</scope>
-    </dependency>
+    </dependency> -->
   </dependencies>
 </project>
