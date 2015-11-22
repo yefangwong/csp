@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.occ.csp.domain.ChurchMember;
-import org.occ.csp.domain.ChurchMemberDtl;
 import org.occ.csp.domain.Fellowship;
 import org.occ.csp.domain.Footprint;
 import org.occ.csp.service.CspService;
@@ -92,42 +91,52 @@ public class ServiceObject extends Thread {
 	private String executeQueryAllFellowships() {
 		//"{\"result\":{\"1\":[\"1\",\"area1\"],\"2\":[\"2\",\"area2\"]}}";
 		StringBuilder builder = new StringBuilder("{\"result\":{");
-		List<Fellowship> fellowships = cspService.getAllFellowships();
-		for (int index=0; index < fellowships.size(); index++) {
-			Fellowship f = fellowships.get(index);
-			String code = f.getFellowshipId();
-			String name = f.getFellowshipName();
-			String regionId = f.getRegion().getRegionId();
-			Date createDate = f.getCreateDate();
-			Date updateDate = f.getUpdateDate();
-			Date dataDate = updateDate == null?createDate:updateDate;
-			String strDataTime = String.valueOf(dataDate.getTime());
-			builder.append("\""+code+"\":[");
-			builder.append("\""+code+"\",\""+name+"\",\""+regionId+"\",\""+strDataTime+"\"],");
+		List<Fellowship> fellowships;
+		try {
+			fellowships = cspService.getAllFellowships();
+			for (int index=0; index < fellowships.size(); index++) {
+				Fellowship f = fellowships.get(index);
+				String code = f.getFellowshipId();
+				String name = f.getFellowshipName();
+				String regionId = f.getRegion().getRegionId();
+				Date createDate = f.getCreateDate();
+				Date updateDate = f.getUpdateDate();
+				Date dataDate = updateDate == null?createDate:updateDate;
+				String strDataTime = String.valueOf(dataDate.getTime());
+				builder.append("\""+code+"\":[");
+				builder.append("\""+code+"\",\""+name+"\",\""+regionId+"\",\""+strDataTime+"\"],");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		String result = builder.substring(0, builder.length()-1);
 		result = result + "}}";
-		return result;
+		return result;			
 	}
 
 	private String executeQueryChurchMembersByFellowshipId(String fellowshipId) {
 		//"{\"result\":{\"1\":[\"1\",\"name1\"],\"2\":[\"1\",\"name2\"]}}";
 		StringBuilder builder = new StringBuilder("{\"result\":{");
-		List<ChurchMember> churchMembers = cspService.getChurchMembersByFellowship(fellowshipId);
-		for (int index=0; index < churchMembers.size(); index++) {
-			ChurchMember c = churchMembers.get(index);
-			String code = c.getMemberSid();
-			String name = c.getMemberName();
-			//TODO
-			//Date createDate = c.getCreateDate();
-			//Date updateDate = c.getUpdateDate();
-			//Date dataDate = updateDate == null?createDate:updateDate;
-			Date createDate = new Date();
-			Date updateDate = new Date();
-			Date dataDate =  updateDate == null?createDate:updateDate;
-			String strDataTime = String.valueOf(dataDate.getTime());
-			builder.append("\""+code+"\":[");
-			builder.append("\""+code+"\",\""+name+"\",\""+fellowshipId+"\",\""+strDataTime+"\"],");
+		List<ChurchMember> churchMembers;
+		try {
+			churchMembers = cspService.getChurchMembersByFellowship(fellowshipId);
+			for (int index=0; index < churchMembers.size(); index++) {
+				ChurchMember c = churchMembers.get(index);
+				String code = c.getMemberSid();
+				String name = c.getMemberName();
+				//TODO
+				//Date createDate = c.getCreateDate();
+				//Date updateDate = c.getUpdateDate();
+				//Date dataDate = updateDate == null?createDate:updateDate;
+				Date createDate = new Date();
+				Date updateDate = new Date();
+				Date dataDate =  updateDate == null?createDate:updateDate;
+				String strDataTime = String.valueOf(dataDate.getTime());
+				builder.append("\""+code+"\":[");
+				builder.append("\""+code+"\",\""+name+"\",\""+fellowshipId+"\",\""+strDataTime+"\"],");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		String result = builder.substring(0, builder.length()-1);
 		result = result + "}}";
@@ -138,7 +147,9 @@ public class ServiceObject extends Thread {
 		//"{\"result\":{\"1\":[\"1\",\"name1\",\"0981170518\",\"62/10/16\",\"yefang.wong@gmail.com\",
 		//\"address\",\"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/c18.18.230.230/s160x160/1174598_10201111834932288_234606359_n.jpg\"]}}";
 		StringBuilder builder = new StringBuilder("{\"result\":{");
-		ChurchMember churchMember = cspService.getChurchMemberById(churchMemberId);
+		ChurchMember churchMember;
+		try {
+			churchMember = cspService.getChurchMemberById(churchMemberId);
 			String sid = churchMemberId;
 			String name = churchMember.getMemberName();
 			String phone = churchMember.getDtl().getTel();
@@ -152,7 +163,10 @@ public class ServiceObject extends Thread {
 			String strDataTime = String.valueOf(dataDate.getTime());
 			builder.append("\""+sid+"\":[");
 			builder.append("\""+sid+"\",\""+name+"\",\""+phone+"\",\""+birthday+
-					"\",\""+email+"\",\""+address+"\",\""+photoUrl+"\",\""+strDataTime+"\"]}}");
+					"\",\""+email+"\",\""+address+"\",\""+photoUrl+"\",\""+strDataTime+"\"]}}");			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String result = builder.substring(0, builder.length()-1);
 		result = result + "}}";
 		return result;
@@ -162,13 +176,16 @@ public class ServiceObject extends Thread {
 	private void executeCheckin(String memberId) {
 		Footprint f;
 		f = new Footprint();
-		f.setFootprintId(cspService.getMaxFootprintId());
-		f.setMemberSid(memberId);
-		f.setLoginDate(new Date());
-		f.setCreateUid("9999");
-		f.setCreateDate(new Date());
-		cspService.saveFootprint(f);
-		
+		try {
+			f.setFootprintId(cspService.getMaxFootprintId());
+			f.setMemberSid(memberId);
+			f.setLoginDate(new Date());
+			f.setCreateUid("9999");
+			f.setCreateDate(new Date());
+			cspService.saveFootprint(f);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println(f.toString());
 	}
 
