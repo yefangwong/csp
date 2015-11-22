@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<param name="Threshold" value="debug" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%t|%5p|%50.50c|%4L|%m%n" />
+		</layout>
+	</appender>
+
+	<appender name="csp_FileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="d:csp.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="Threshold" value="debug" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%5p|%50.50c{1}|%m%n" />
+		</layout>
+	</appender>
+
+    <appender name="error_FileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/export/home/cspusr/logs/csp/csp_ws_error.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}|%5p|%30.30c{1}|%4L|%m%n" />
+        </layout>
+
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="error" />
+            <param name="LevelMax" value="fatal" />
+        </filter>
+    </appender>
+
+	<logger name="ap">
+		<level value="debug" />
+	</logger>
+
+	<logger name="base">
+		<level value="debug" />
+	</logger>
+
+	<logger name="common">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.jdbc">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.ws">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping">
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor">
+		<level value="debug" />
+	</logger>
+
+	<logger name="base.dao.BaseBeanPropertyRowMapper">
+		<level value="error" />
+	</logger>
+
+	<logger name="org.springframework.remoting.support.RemoteInvocationTraceInterceptor">
+		<level value="error" />
+	</logger>
+
+	<logger name="org.occ.csp">
+		<level value="debug" />
+	</logger>
+   
+	<root>
+		<level value="debug" />
+		<appender-ref ref="csp_FileAppender" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</log4j:configuration>
