@@ -1,33 +1,39 @@
 package org.occ.csp.persistence;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.occ.csp.domain.ActivatedCardInfo;
 import org.occ.csp.domain.ChurchMember;
 import org.occ.csp.domain.Fellowship;
 import org.occ.csp.domain.Footprint;
 import org.occ.csp.domain.Region;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository("cspDao")
+import base.util.BaseLogger;
+
+//@Repository("cspDao")
+@Component
 @Transactional
 public class JpaCspDao implements CspDao {
-    private Logger log = LoggerFactory.getLogger(JpaCspDao.class);
+    private Logger log = new BaseLogger(getClass());
     
 	private static final String ALL_REGIONS = "SELECT r FROM Region r";
 	private static final String ALL_FELLOWSHIPS = "SELECT f FROM Fellowship f";
 	private static final String ALL_CHURCHMEMBERS = "SELECT c FROM ChurchMember c";
+	private static final String ALL_ACTIVATED_CARDS = "SELECT a FROM ActivatedCardInfo a";
 	private static final String FELLOWSHIPS_BY_REGIONID = 
 		"SELECT f FROM Fellowship f WHERE f.region.regionId = :regionId";
 	private static final String CHURCHMEMBERS_BY_FELLOWSHIPID = 
 		"SELECT c FROM ChurchMember c WHERE c.resideIn.fellowshipId = :fellowshipId";
+	private static final String MEMBERSID_BY_MEMBERNAME = 
+		"SELECT c FROM ChurchMember c WHERE c.memberName = :memberName";
 	private static final String FOOTPRINTS_BY_MEMBERID = 
 		"SELECT f FROM Footprint f WHERE f.memberSid = :memberId";
 	private static final String INSERT_CHURCHMEMBER = 
@@ -39,8 +45,22 @@ public class JpaCspDao implements CspDao {
 		"SELECT f FROM Footprint f ORDER BY f.footprintId desc";
 	
 	private static final String INSERT_FOOTPRINT = 
-		"INSERT INTO tbl_footprint (fpt_sid, fpt_crt_dte, fpt_crt_uid, cmem_login_dte, cmem_sid) " +
-		" VALUES(?,?,?,?,?)";
+		"INSERT INTO tbl_footprint (fpt_crt_dte, fpt_crt_uid, cmem_login_dte, cmem_sid) VALUES(?,?,?,?)";
+	
+	//------- activated card info
+	private static final String INSERT_ACTIVATED_CARDINFO = 
+			"INSERT INTO tbl_activated_cardinfo (occ_id, cmem_sid, card_num, create_user, create_date) " +
+					" VALUES(uuid(),?,?,?,?)";
+	private static final String INSERT_ACTIVATED_CARDINFO_WITH_OCCID =
+			"INSERT INTO tbl_activated_cardinfo (occ_id, cmem_sid, card_num, create_user, create_date) " +
+					" VALUES(?,?,?,?,?)";
+	private static final String OCCID_BY_CARDNUM = 
+			"SELECT a FROM ActivatedCardInfo a WHERE a.pk.cardNumber = :cardNumber";
+	private static final String ACTIVATED_CARD_BY_MEMBER_SID =
+			"SELECT a FROM ActivatedCardInfo a WHERE a.churchMember.memberSid = :memberSid";
+
+	private static final String DELETE_ACTIVATED_CARD_INFO_BY_CARDNUM = 
+			"DELETE a FROM tbl_activated_cardinfo a WHERE a.card_num = ?";
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -59,50 +79,8 @@ public class JpaCspDao implements CspDao {
 	@Override
 	public List<ChurchMember> findChurchMembersByFellowship(String fellowshipId) {
 		//TODO fix bug here
-		//return (List<ChurchMember>)em.createQuery(CHURCHMEMBERS_BY_FELLOWSHIPID).setParameter("fellowshipId", fellowshipId).
-		//getResultList();
-		List<ChurchMember> churchMemberList = new ArrayList<ChurchMember>();
-		ChurchMember cm = new ChurchMember();
-		cm.setMemberName("周Q任");
-		cm.setMemberSid("1");
-		churchMemberList.add(cm);
-
-		cm = new ChurchMember();
-		cm.setMemberName("翁Q芳");
-		cm.setMemberSid("2");
-		churchMemberList.add(cm);
-
-		cm = new ChurchMember();
-		cm.setMemberName("華Q元");
-		cm.setMemberSid("3");
-		churchMemberList.add(cm);
-		
-		cm = new ChurchMember();
-		cm.setMemberName("陳Q邦");
-		cm.setMemberSid("4");
-		churchMemberList.add(cm);
-
-		cm = new ChurchMember();
-		cm.setMemberName("黃Q茜");
-		cm.setMemberSid("5");
-		churchMemberList.add(cm);
-	
-		cm = new ChurchMember();
-		cm.setMemberName("黃Q玲");
-		cm.setMemberSid("6");
-		churchMemberList.add(cm);
-
-		cm = new ChurchMember();
-		cm.setMemberName("謝Q力");
-		cm.setMemberSid("7");
-		churchMemberList.add(cm);
-
-		cm = new ChurchMember();
-		cm.setMemberName("廖Q惠");
-		cm.setMemberSid("8");
-		churchMemberList.add(cm);
-
-		return churchMemberList;
+		return (List<ChurchMember>)em.createQuery(CHURCHMEMBERS_BY_FELLOWSHIPID).setParameter("fellowshipId", fellowshipId).
+		getResultList();
 	}
 	
 	@Override
@@ -144,8 +122,8 @@ public class JpaCspDao implements CspDao {
 		query.setParameter(1, member.getMemberAccount()); 			   //account
 		query.setParameter(2, member.getMemberPassword()); 			   //pwd
 		query.setParameter(3, member.getMemberName()); 				   //name
-		query.setParameter(4, member.getResideIn().getFellowshipId()); //fellowship id
-		query.setParameter(5, member.getMemberLoginDate());           //login date
+		query.setParameter(4, member.getResideIn() == null? null : member.getResideIn().getFellowshipId()); //fellowship id
+		query.setParameter(5, member.getMemberLoginDate());            //login date
 		query.setParameter(6, member.getCreateUid());
 		query.setParameter(7, member.getCreateDate());
 		
@@ -156,11 +134,10 @@ public class JpaCspDao implements CspDao {
 	public void saveFootprint(Footprint footprint) {
 		Query query = em.createNativeQuery(INSERT_FOOTPRINT);
 		
-		query.setParameter(1, footprint.getFootprintId());
-		query.setParameter(2, footprint.getCreateDate());
-		query.setParameter(3, footprint.getCreateUid());
-		query.setParameter(4, footprint.getLoginDate());
-		query.setParameter(5, footprint.getMemberSid());
+		query.setParameter(1, footprint.getCreateDate());
+		query.setParameter(2, footprint.getCreateUid());
+		query.setParameter(3, footprint.getLoginDate());
+		query.setParameter(4, footprint.getMemberSid());
 	
 		query.executeUpdate();
 	}
@@ -174,7 +151,7 @@ public class JpaCspDao implements CspDao {
 	public ChurchMember findChurchMemberByEmail(String email) {
 		log.info("find church member=" + email);
 		String CHURCHMEMBER_BY_EMAIL = 
-				"SELECT * FROM tbl_churchmem_mst WHERE cmem_acct = '" + email + "'";
+				"SELECT * FROM tbl_churchmem_mst WHERE cmem_act = '" + email + "'";
 		//TODO bug
 		//fix the it need 2 parameters...
 		List<ChurchMember> churchMemberList = em.createNativeQuery(CHURCHMEMBER_BY_EMAIL).getResultList();
@@ -189,6 +166,71 @@ public class JpaCspDao implements CspDao {
 	@Override
 	public ChurchMember findChurchMemberById(String memberId) {
 		return em.find(ChurchMember.class, memberId);
+	}
+
+	@Override
+	public String findChurchMemberSidByName(String name) {
+		List<ChurchMember> churchMemberList = (List<ChurchMember>)em.createQuery(MEMBERSID_BY_MEMBERNAME).setParameter("memberName", name).
+		getResultList();
+		if (churchMemberList.isEmpty()) return null;
+		return churchMemberList.get(0).getMemberSid();
+	}
+
+	@Override
+	public void insertActivatedCardInfo(String memberSid, String cardNum) {
+		Query query = em.createNativeQuery(INSERT_ACTIVATED_CARDINFO);
+		
+		query.setParameter(1, memberSid); 			   //account
+		query.setParameter(2, cardNum); 			   //pwd
+		query.setParameter(3, "admin");
+		query.setParameter(4, Calendar.getInstance().getTime());
+		
+		query.executeUpdate();
+	}
+
+	@Override
+	public String findOccIdFromCardNum(String cardNum) {
+		List<ActivatedCardInfo> aciList = em.createQuery(OCCID_BY_CARDNUM).setParameter("cardNumber", cardNum).getResultList();
+		if (aciList.size() > 0) {
+			return aciList.get(0).getPk().getOccId();
+		}
+		return null;
+		
+	}
+
+	@Override
+	public void deleteCard(String cardNumber) {
+		Query query = em.createNativeQuery(DELETE_ACTIVATED_CARD_INFO_BY_CARDNUM);
+		query.setParameter(1, cardNumber); 			 
+		query.executeUpdate();
+	}
+
+	@Override
+	public List<ActivatedCardInfo> findActicatedCardInfoByMemberSid(String memberSid) {
+		return (List<ActivatedCardInfo>)em.createQuery(ACTIVATED_CARD_BY_MEMBER_SID).setParameter("memberSid", memberSid).getResultList();
+	}
+
+	@Override
+	public void insertActivatedCardInfo(String OCCId, String memberSid,
+			String cardNumber) {
+		Query query = em.createNativeQuery(INSERT_ACTIVATED_CARDINFO_WITH_OCCID);
+		
+		log.debug("insert activated cardinfo with the same name {},{},{}", 
+				new Object[]{OCCId, memberSid, cardNumber});
+		
+		query.setParameter(1, OCCId); 			   //OCC Id
+		query.setParameter(2, memberSid); 		   //account
+		query.setParameter(3, cardNumber); 		   //pwd
+		query.setParameter(4, "admin");
+		query.setParameter(5, Calendar.getInstance().getTime());
+		
+		query.executeUpdate();
+		
+	}
+
+	@Override
+	public List<ActivatedCardInfo> findAllActivatedCardList() {
+		return em.createQuery(ALL_ACTIVATED_CARDS).getResultList();
 	}
 
 }
