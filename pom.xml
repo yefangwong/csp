@@ -6,7 +6,7 @@
 	<artifactId>csp-pom</artifactId>
 	<packaging>pom</packaging>
 	<name>csp-pom</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<distributionManagement>
 		<repository>
 			<id>ip-10-204-243-185</id>
@@ -27,6 +27,13 @@
 		<repository>
 			<id>ip-10-204-243-185-snapshot</id>
 			<url>http://184.73.190.130:8080/artifactory/libs-snapshot-local</url>
+			<releases>
+            	<enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:1</updatePolicy>
+            </snapshots>
 		</repository>
 	</repositories>
 	<modules>
@@ -38,7 +45,7 @@
 		<module>csp-server</module>
 		<module>csp-processor</module>
 		<!--<module>csp-api</module> -->
-		<module>csp-web</module>
+		<!-- <module>csp-web</module> -->
 	</modules>
 	<build>
 		<pluginManagement>
@@ -246,6 +253,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-ws</artifactId>
+				<version>3.0.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>3.0.5.RELEASE</version>
 			</dependency>
@@ -331,7 +343,21 @@
 				<artifactId>rt</artifactId>
 				<version>1.5.0_06</version>
 			</dependency>
+			
+			<!-- ms sql jdbc driver -->
+		    <dependency>
+		    	<groupId>com.microsoft.sqlserver</groupId>
+		    	<artifactId>sqljdbc4</artifactId>
+		    	<version>4.0</version>
+			</dependency>
 
+			<!-- my sql driver -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.37</version>
+			</dependency>
+			
 			<!-- HongFang Cornelius Library -->
 			<!--ckernel -->
 			<dependency>
@@ -341,13 +367,25 @@
 				<scope>compile</scope>
 			</dependency>
 			<!-- Cloud Service Platform -->
-
+			<dependency>
+				<groupId>csp.base</groupId>
+				<artifactId>csp-base</artifactId>
+				<version>0.0.1</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>csp.common</groupId>
+				<artifactId>csp-common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<scope>compile</scope>
+			</dependency>			
 			<dependency>
 				<groupId>com.hongfang.csp.webframeworx.web</groupId>
 				<artifactId>csp-webframeworx-web</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<scope>compile</scope>
 			</dependency>
+
 			<!-- TODO cloud service platform auth 
 			<dependency> 
 				<groupId>com.hongfang.csp.webframeworx.auth</groupId> 
@@ -393,7 +431,11 @@
 				<artifactId>csp-persistence-jpa</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>csp-tools</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!--End of csp -->
 		</dependencies>
 	</dependencyManagement>
