@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <servers>
+    <server>
+        <id>ip-10-204-243-185</id>
+        <username>admin</username>
+        <password>P@ssw0rd</password>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <repositories>
+          <repository>
+              <id>ip-10-204-243-185</id>
+              <url>http://184.73.190.130:8080/artifactory/libs-snapshot-local</url>
+          </repository>
+      </repositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>default</activeProfile>
+  </activeProfiles>
+</settings>
