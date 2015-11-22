@@ -1,6 +1,6 @@
 package org.occ.csp.service;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.occ.csp.domain.ActivatedCardInfo;
@@ -22,65 +22,65 @@ public class CspServiceImpl implements CspService {
    }
 	
 	@Autowired
-	CspDao cspDao;
+	CspDao cspDaoImpl;
 	
 	@Override
 	public List<Region> getAllRegions() {
-		return cspDao.findAllRegions();
+		return cspDaoImpl.findAllRegions();
 	}
 
 	@Override
 	public List<Fellowship> getFellowshipsByRegion(String regionId) {
-		return cspDao.findFellowshipsByRegion(regionId);
+		return cspDaoImpl.findFellowshipsByRegion(regionId);
 	}
 
 	@Override
 	public List<ChurchMember> getChurchMembersByFellowship(String fellowshipId) {
-		return cspDao.findChurchMembersByFellowship(fellowshipId);
+		return cspDaoImpl.findChurchMembersByFellowship(fellowshipId);
 	}
 
 	@Override
 	public synchronized void saveFootprint(Footprint footprint) {
 		System.out.println("saveFootprint :" + footprint.getMemberSid());
-		cspDao.saveFootprint(footprint);
+		cspDaoImpl.saveFootprint(footprint);
 	}
 
 	@Override
 	public List<Footprint> getFootprintsByMemberId(String memberId) {
-		return cspDao.findFootprintsByMemberId(memberId);
+		return cspDaoImpl.findFootprintsByMemberId(memberId);
 
 	}
 	
 	@Override 
 	public int getMaxFootprintId() {
-		return cspDao.findMaxFootprintId();
+		return cspDaoImpl.findMaxFootprintId();
 	}
 	
 	@Override
 	public Fellowship getFellowshipById(String fellowshipId) {
-		return cspDao.findFellowshipById(fellowshipId);
+		return cspDaoImpl.findFellowshipById(fellowshipId);
 	}
 	
 	@Override
 	public List<Fellowship> getAllFellowships() {
-		return cspDao.findAllFellowships();
+		return cspDaoImpl.findAllFellowships();
 	}
 	
 	@Override
 	public ChurchMember getChurchMemberById(String churchMemberId) {
-		return cspDao.findChurchMemberById(churchMemberId);
+		return cspDaoImpl.findChurchMemberById(churchMemberId);
 	}
 	
 	@Override
 	public ChurchMember getChurchMemberByEmail(String email) {
-		return cspDao.findChurchMemberByEmail(email);
+		return cspDaoImpl.findChurchMemberByEmail(email);
 	}
 
 	@Override
 	public void saveChurchMember(ChurchMember member) throws Exception {
 		ChurchMember cm = getChurchMemberByEmail(member.getMemberAccount());
 		if (cm == null) {
-			cspDao.saveChurchMember(member);
+			cspDaoImpl.saveChurchMember(member);
 		} else {
 			throw new Exception("account :" + member.getMemberAccount() + " already exists...");
 		}
@@ -88,37 +88,63 @@ public class CspServiceImpl implements CspService {
 
 	@Override
 	public boolean cardNumExists(String cardNum) {
-		// TODO Auto-generated method stub
-		return false;
+		String occId = cspDaoImpl.findOccIdFromCardNum(cardNum);
+		if (occId == null) 
+			return false;
+		else
+			return true;
 	}
 
 	@Override
-	public String activateCard(String name, String cardNum) throws Exception {
-		// TODO Auto-generated method stub
-		//throw new Exception("add card fail");
-		return "6091b930-fd63-11e4-b939-0800200c9a66";
+	public void activateCard(String name, String cardNum) throws Exception {
+		// get member sid by name
+		try {
+			String memberSid = cspDaoImpl.findChurchMemberSidByName(name);
+			if (memberSid == null) { // insert into church member data
+				ChurchMember member = new ChurchMember();
+				member.setMemberName(name);
+				member.setCreateUid("admin");
+				member.setCreateDate(Calendar.getInstance().getTime());
+				cspDaoImpl.saveChurchMember(member);
+				memberSid = cspDaoImpl.findChurchMemberSidByName(name);
+			}
+			// insert activate card info and get occ id
+			cspDaoImpl.insertActivatedCardInfo(memberSid, cardNum);
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+		}
 	}
-
+	
+	@Override
+	public String getOccId(String cardNum) throws Exception {
+		return cspDaoImpl.findOccIdFromCardNum(cardNum);
+	}
+	
 	@Override
 	public void deleteCard(String cardNumber) throws Exception {
-		// TODO Auto-generated method stub
-		
+		cspDaoImpl.deleteCard(cardNumber);
 	}
 
 	@Override
-	public List<ActivatedCardInfo> getCardInfoByName(String name) {
-		List<ActivatedCardInfo> resultList = new ArrayList<ActivatedCardInfo>();
-		ActivatedCardInfo aci = new ActivatedCardInfo();
-		aci.setCardNumber("12344");
-		aci.setName("Mark");
-		aci.setOccId("6091b930-fd63-11e4-b939-0800200c9a61");
-		resultList.add(aci);
-		return resultList;
+	public List<ActivatedCardInfo> getCardInfoByName(String name) throws Exception {
+		String memberSid = cspDaoImpl.findChurchMemberSidByName(name);
+		return cspDaoImpl.findActicatedCardInfoByMemberSid(memberSid);
 	}
 
 	@Override
 	public void activeCardWithTheSameName(String OCCId, String name, String cardNumber)
 			throws Exception {
-		//throw new Exception("add card fail");
+		try {
+			String memberSid = cspDaoImpl.findChurchMemberSidByName(name);
+			// insert activate card info and get occ id
+			cspDaoImpl.insertActivatedCardInfo(OCCId, memberSid, cardNumber);
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+		}
+	}
+	
+	@Override
+	public List<ActivatedCardInfo> getAllActivatedCardList() throws Exception {
+		return cspDaoImpl.findAllActivatedCardList();
 	}
 }
