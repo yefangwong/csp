@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app>
-  <context-param>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+ <!--  <context-param>
       <param-name>org.apache.tiles.definition.DefinitionsFactory.DEFINITIONS_CONFIG</param-name>
       <param-value>/WEB-INF/conf/tiles/Tiles.xml</param-value>
   </context-param>
@@ -22,12 +21,12 @@
       <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
   
-  <!-- Tiles listener -->
+  Tiles listener
   <listener>
       <listener-class>com.hongfang.csp.webframeworx.web.tiles.CspTilesListener</listener-class>
   </listener>
   
-  <!-- Servlets -->
+  Servlets
   <servlet>
       <servlet-name>springmvc</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -44,7 +43,7 @@
   
   <session-config>
   	<session-timeout>30</session-timeout>
-  </session-config>
+  </session-config> -->
 
   <!-- Default page to serve -->
   <welcome-file-list>
