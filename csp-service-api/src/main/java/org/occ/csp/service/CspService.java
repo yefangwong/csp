@@ -67,7 +67,7 @@ public interface CspService {
 	
 	/**
 	 * 根據卡號取得 OCC Id
-	 * @param cardNum
+	 * @param cardNum-
 	 * @return OCC Id
 	 * @throws Exception
 	 */
