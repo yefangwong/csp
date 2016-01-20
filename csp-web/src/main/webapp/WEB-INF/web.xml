@@ -7,26 +7,25 @@
       <param-name>org.apache.tiles.definition.DefinitionsFactory.DEFINITIONS_CONFIG</param-name>
       <param-value>/WEB-INF/conf/tiles/Tiles.xml</param-value>
   </context-param>
-   
-  <context-param>
+    -->
+    
+  <!-- <context-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/conf/spring/ApplicationContext.xml</param-value>
-  </context-param>
+  </context-param>-->
   
-  <listener>
+   <!-- <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+  </listener>-->
   
-  <listener>
+  <!-- <listener>
       <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-  </listener>
+  </listener>-->
   
-  Tiles listener
-  <listener>
+  <!-- <listener>
       <listener-class>com.hongfang.csp.webframeworx.web.tiles.CspTilesListener</listener-class>
-  </listener>
+  </listener>-->
   
-  Servlets
   <servlet>
       <servlet-name>springmvc</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -41,6 +40,7 @@
       <url-pattern>/</url-pattern>
   </servlet-mapping>
   
+  <!--
   <session-config>
   	<session-timeout>30</session-timeout>
   </session-config> -->
