@@ -37,11 +37,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.occ.csp</groupId>
-      <artifactId>csp-service-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
