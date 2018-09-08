@@ -2,3 +2,7 @@
 csp-server/.settings/org.eclipse.wst.common.component
 csp-server/.settings/org.eclipse.wst.common.component
 csp-server/d:csp.log
+csp-web/.settings/org.eclipse.wst.common.component
+csp-web/.settings/org.eclipse.wst.common.project.facet.core.xml
+csp-web/.classpath
+csp-web/.settings/org.eclipse.wst.validation.prefs

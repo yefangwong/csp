@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<name>csp-pom</name>
 	<version>1.0.0</version>
-	<distributionManagement>
+	<!-- <distributionManagement>
 		<repository>
 			<id>ip-10-204-243-185</id>
 			<name>ip-10-204-243-185-releases</name>
@@ -35,17 +35,18 @@
                 <updatePolicy>interval:1</updatePolicy>
             </snapshots>
 		</repository>
-	</repositories>
+	</repositories>-->
 	<modules>
 		<module>csp-domain-jpa</module>
 		<module>csp-persistence-api</module>
 		<module>csp-persistence-jpa</module>
 		<module>csp-service-api</module>
 		<module>csp-service</module>
-		<module>csp-server</module>
+		<!-- <module>csp-server</module>-->
 		<module>csp-processor</module>
 		<!--<module>csp-api</module> -->
-		<module>csp-web</module>
+		<!-- <module>csp-web</module> -->
+		<module>csp-ois</module>
 	</modules>
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
@@ -364,9 +365,9 @@
 			<!-- HongFang Cornelius Library -->
 			<!--ckernel -->
 			<dependency>
-				<groupId>com.hongfang.ckernel</groupId>
+				<groupId>com.hongfang.csp.ckernel</groupId>
 				<artifactId>csp-ckernel</artifactId>
-				<version>1.0</version>
+				<version>1.0-SNAPSHOT</version>
 				<scope>compile</scope>
 			</dependency>
 			<!-- Cloud Service Platform -->
@@ -389,13 +390,13 @@
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- TODO cloud service platform auth 
+			<!-- TODO cloud service platform auth -->
 			<dependency> 
 				<groupId>com.hongfang.csp.webframeworx.auth</groupId> 
 				<artifactId>csp-webframeworx-auth</artifactId> 
 				<version>0.0.1-SNAPSHOT</version> 
 				<scope>compile</scope> 
-			</dependency> -->
+			</dependency>
 			<!-- End of HongFang Cornelius Library -->
 
 			<!--csp -->
