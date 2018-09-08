@@ -159,7 +159,7 @@
       <artifactId>spring-tx</artifactId>
       <scope>compile</scope>
     </dependency>
-    <!-- 
+    
     <dependency>
       <groupId>org.occ.csp</groupId>
       <artifactId>csp-persistence-jpa</artifactId>
@@ -180,23 +180,23 @@
       <artifactId>csp-persistence-api</artifactId>
       <scope>compile</scope>
     </dependency>
-    -->
+    
     <dependency>
       <groupId>com.hongfang.csp.webframeworx.web</groupId>
       <artifactId>csp-webframeworx-web</artifactId>
       <scope>compile</scope>
     </dependency>
-    <!-- 
+    
     <dependency>
       <groupId>com.hongfang.csp.webframeworx.auth</groupId>
       <artifactId>csp-webframeworx-auth</artifactId>
       <scope>compile</scope>
     </dependency>
-    -->
-    <!-- <dependency>
-      <groupId>com.hongfang.ckernel</groupId>
+   
+    <dependency>
+      <groupId>com.hongfang.csp.ckernel</groupId>
       <artifactId>csp-ckernel</artifactId>
       <scope>compile</scope>
-    </dependency> -->
+    </dependency> 
   </dependencies>
 </project>
