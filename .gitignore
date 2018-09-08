@@ -7,3 +7,4 @@ csp-web/.settings/org.eclipse.wst.common.project.facet.core.xml
 csp-web/.classpath
 csp-web/.settings/org.eclipse.wst.validation.prefs
 csp-domain-jpa/.classpath
+csp-web/.classpath
