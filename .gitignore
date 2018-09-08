@@ -8,3 +8,8 @@ csp-web/.classpath
 csp-web/.settings/org.eclipse.wst.validation.prefs
 csp-domain-jpa/.classpath
 csp-web/.classpath
+.project
+.settings/org.eclipse.m2e.core.prefs
+csp-domain-jpa/.classpath
+csp-server/.settings/org.eclipse.wst.common.component
+csp-web/.classpath
