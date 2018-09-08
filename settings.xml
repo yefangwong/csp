@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <servers>
+  <localRepository>${user.home}/.m2/repository</localRepository>
+  <!-- <servers>
     <server>
         <id>ip-10-204-243-185</id>
         <username>admin</username>
@@ -17,8 +18,8 @@
           </repository>
       </repositories>
     </profile>
-  </profiles>
-  <activeProfiles>
+  </profiles>-->
+  <!-- <activeProfiles>
     <activeProfile>default</activeProfile>
-  </activeProfiles>
+  </activeProfiles>-->
 </settings>
