@@ -62,14 +62,14 @@
       <artifactId>h2</artifactId>
       <scope>compile</scope>
     </dependency>
-    <dependency>
+   <dependency>
       <groupId>csp.base</groupId>
       <artifactId>csp-base</artifactId>
     </dependency>
         <dependency>
       <groupId>csp.common</groupId>
       <artifactId>csp-common</artifactId>
-    </dependency>    
+    </dependency>   
     <dependency>
       <groupId>org.occ.csp</groupId>
       <artifactId>csp-persistence-api</artifactId>
