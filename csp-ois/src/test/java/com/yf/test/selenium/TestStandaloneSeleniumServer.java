@@ -14,6 +14,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TestStandaloneSeleniumServer {
+	@Test
 	public void testFirefoxDriver() throws MalformedURLException {
 		this.execute(DesiredCapabilities.firefox());
 	}
