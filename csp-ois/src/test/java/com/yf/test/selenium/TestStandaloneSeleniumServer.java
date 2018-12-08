@@ -12,7 +12,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-
+/**
+ * 第一支 Selenium Test 測試程式
+ * @author yfwong
+ *
+ */
 public class TestStandaloneSeleniumServer {
 	@Test
 	public void testFirefoxDriver() throws MalformedURLException {
