@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 /**
  * 第一支 Selenium Test 測試程式
  * @author yfwong
- *
+ * @date 2018-12-08
  */
 public class TestStandaloneSeleniumServer {
 	@Test
