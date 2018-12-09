@@ -23,7 +23,7 @@ public class TestStandaloneSeleniumServer {
 		this.execute(DesiredCapabilities.firefox());
 	}
 	
-	@Test
+	//@Test
 	public void testChromeDriver() throws MalformedURLException {
 		this.execute(DesiredCapabilities.chrome());
 	}
