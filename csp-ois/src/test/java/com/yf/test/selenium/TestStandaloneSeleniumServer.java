@@ -18,12 +18,12 @@ import static org.junit.Assert.assertThat;
  * @date 2018-12-08
  */
 public class TestStandaloneSeleniumServer {
-	@Test
+	//@Test
 	public void testFirefoxDriver() throws MalformedURLException {
 		this.execute(DesiredCapabilities.firefox());
 	}
 	
-	//@Test
+	@Test
 	public void testChromeDriver() throws MalformedURLException {
 		this.execute(DesiredCapabilities.chrome());
 	}
