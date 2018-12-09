@@ -1,17 +1,12 @@
 package com.yf.test.selenium;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 /**
  * 第一支 Selenium Test 測試程式
  * @author yfwong
@@ -29,14 +24,24 @@ public class TestStandaloneSeleniumServer {
 	}
 	
 	private void execute(final DesiredCapabilities capability) throws MalformedURLException {
-		WebDriver driver = new RemoteWebDriver(new URL("http://172.17.0.1:4444/wd/hub"),
-				capability);
-		driver.get("http://www.javacodegeeks.com");
-		WebElement element = driver.findElement(By.name("s"));
-		element.sendKeys("selenium");
-		element.submit();
-		assertThat(driver.getTitle(),
-				is("You searched for selenium | Java Code Geeks"));
-		driver.quit();
+		 System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+         ChromeOptions chromeOptions = new ChromeOptions();
+         chromeOptions.addArguments("--headless");
+         chromeOptions.addArguments("--no-sandbox");
+
+         WebDriver driver = new ChromeDriver(chromeOptions);
+         driver.get("https://google.com");
+         try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+         if (driver.getPageSource().contains("I'm Feeling Lucky")) {
+                 System.out.println("Pass");
+         } else {
+                 System.out.println("Fail");
+         }
+         driver.quit();
 	}
 }
