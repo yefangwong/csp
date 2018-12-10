@@ -1,0 +1,68 @@
+#!/bin/bash
+# /etc/init.d/selenium-hub
+# CentOS-compatible Selenium Grid's hub startup script.
+# Bartłomiej Sacharski &lt;bartlomiej[at]cementownia.org&gt;
+### BEGIN INIT INFO
+# Provides:          selenium-hub
+# Required-Start:    $remote_fs $syslog $network
+# Required-Stop:     $remote_fs $syslog $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start Selenium Grid's hub at boot time
+# Description:       Controls selenium hub.
+### END INIT INFO
+ 
+# Source function library.
+. /etc/init.d/functions
+# Place for pid file
+SELENIUM_PID=/var/run/selenium-hub.pid
+# Create selenium user before or change it
+SELENIUM_USER=selenium
+# Location of log file
+SELENIUM_LOG_FILE=/var/log/selenium/selenium.log
+# Java interpreter
+JAVA_CMD="/usr/bin/java -jar"
+# Version of Selenium grid you're using
+SELENIUM_GRID_VERSION=2.29.0
+# Selenium Grid home directory
+SELENIUM_GRID_HOME=/opt/selenium
+# Location of Selenium Grid server standalone JAR
+SELENIUM_GRID_CMD="$SELENIUM_GRID_HOME/selenium-server-standalone-$SELENIUM_GRID_VERSION.jar"
+# Options for running SG
+PARAMS="-role hub"
+ 
+case "$1" in
+	start)
+		echo -n "Starting Selenium Hub ..."
+		# ensure that we have a dir for the logs
+		if [ ! -f $SELENIUM_LOG_FILE ]; then 
+			mkdir $(dirname $SELENIUM_LOG_FILE) &gt; /dev/null 2&gt;$1
+			chown $SELENIUM_USER:$SELENIUM_USER $(dirname $SELENIUM_LOG_FILE) &gt; /dev/null 2&gt;$1
+		fi
+		# retrieving pid of the paretn process
+		/bin/su -l "$SELENIUM_USER" --shel=/bin/bash -c "$JAVA_CMD $SELENIUM_GRID_CMD $PARAMS 2&gt; $SELENIUM_LOG_FILE &amp;"
+		echo $(ps hww -u "$SELENIUM_USER" -o pid,cmd | grep "$SELENIUM_GRID_CMD $PARAMS" | /bin/awk '{ print $1 }') &gt; "$SELENIUM_PID"
+		if [ $? == "0" ]; then
+			success	
+		else
+			failure
+		fi
+		echo 
+		echo "Log file: $SELENIUM_LOG_FILE" 
+		;;
+	status)
+		status -p "$SELENIUM_PID" selenium 
+		;;
+	stop)
+		echo -n "Killing Selenium Grid ..."
+		killproc -p "$SELENIUM_PID" selenium
+		echo
+		;;
+	restart)
+		$0 stop
+		$0 start
+		;;
+	*)
+		echo "Usage: $0 {start|stop|status|restart}"
+		exit 1
+esac
